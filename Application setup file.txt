@@ -1,0 +1,82 @@
+-----------------------------------------------------------------------
+How to install and configure Web Applications on AWS Using Amazon Linux
+-----------------------------------------------------------------------
+
+1. Connect ec2 instance via putty using public ip address along with key pairs
+2. sudo -i       (become root user)
+3. dnf update    (updating packages)
+4. dnf install nginx -y    (installing nginx)
+5. systemctl start nginx   (start nginx)
+6. systemctl enable nginx  (enable nginx)
+7. We can test our nginx website by visiting public IP address
+8. dnf install -y nodejs   (install node.js)
+9. node --version	   (ckeck version)
+10. npm --version
+11. mkdir -p /home/nodeapp   (creating directory where we will store our app.js file0
+12. chown ec2-user:ec2-user /home/nodeapp   (change the ownership)
+13. vi /home/nodeapp/app.js
+Press i to enter the Edit mode and paste the following code:
+
+const express = require(‘express’);
+const app = express();
+
+app.get(‘/’, (req, res) => {
+    res.send(‘Hello from our Node.js app behind Nginx!’);
+});
+
+app.listen(3000, () => {
+    console.log(‘Node app is running on port 3000’);
+});
+
+module.exports = app;  // for testing purposes
+
+Now we can save the file, by pressing Esc and :wq
+
+14. npm init -y
+15. npm install express  (this command installs the express framework in our Node.js Project)
+16. vi /etc/nginx/conf.d/nodeapp.conf
+
+server {
+    listen 80;
+
+    server_name 18.153.64.122;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection ‘upgrade’;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+17. nginx -t (checking nginx syntax)
+18. systemctl restart nginx (restarting nginx)
+19. cd /home/nodeapp/ 
+20. node app.js (we can run our application by running this command)
+We can confirm if our application is running on port 80 when we place the IP address of our instance in the browser:
+http://18.153.64.122/  (hit the url for public)
+
+
+
+
+---------------------------------------------------------------------------------
+How to install and configure PostgreSQL on Amazon linux
+---------------------------------------------------------------------------------
+1. sudo dnf update  (updating packages)
+2. sudo dnf install postgresql15.x86_64 postgresql15-server  (Install PostgreSQL 15 on Amazon Linux)
+3. sudo postgresql-setup --initdb    (Initialize the PostgreSQL Database)
+4. sudo systemctl start postgresql   (Add the PostgreSQL service to the system startup)
+5. sudo systemctl status postgresql  (Check the status of PostgreSQL)
+6. sudo passwd postgres   (setting password)
+7. su – postgres    (login using Postgres system account)
+8. psql -c "ALTER USER postgres WITH PASSWORD 'your-password';"  (Now, change the Admin database password)
+9. sudo vi /var/lib/pgsql/data/postgresql.conf   (Enable Remote Connection For PostgreSQL on Amazon Linux)
+10. host    all          all            0.0.0.0/0  md5   (Add the following to the end of the file to allow client connections to all databases)
+11. sudo systemctl start postgresql    (start postgresql)
+12. sudo systemctl enable postgresql   (enable postgresql)
+13. sudo systemctl status postgresql   (status postgresql)
+14. sudo systemctl restart postgresql  (restart postgresql)
+
+

@@ -1,0 +1,50 @@
+1.Terraform Setup:
+--> Install Terraform on your local machine.
+--> Create a new directory for your Terraform project.
+--> Write a main.tf file with your desired resources (VPC, subnets, security groups, etc.).
+--> Initialize Terraform: terraform init.
+--> Apply the configuration: terraform apply.
+
+2. Private Network (VPC):
+--> Define a Virtual Private Cloud (VPC) in your main.tf.
+--> Create public and private subnets within the VPC.
+--> Configure route tables to control traffic flow.
+--> Set up Network Address Translation (NAT) gateways for private subnet internet access.
+
+3. Provision EC2 Instances:
+--> Define an EC2 instance resource in your Terraform configuration.
+--> Specify instance type, AMI, key pair, and security group.
+--> Use user data or remote-exec provisioners to install software on the instances.
+
+4. Database (PostgreSQL):
+--> Create an RDS (Relational Database Service) instance in your Terraform configuration.
+--> Specify the PostgreSQL engine, instance class, storage, and credentials.
+--> Ensure the RDS instance is in the private subnet for security.
+
+5. Security Considerations:
+--> Configure security groups to allow necessary traffic (SSH, HTTP, PostgreSQL).
+--> Use IAM roles for EC2 instances to access RDS securely.
+--> Encrypt data at rest using AWS Key Management Service (KMS).
+
+6. Testing and Validation:
+--> Deploy your Terraform configuration.
+--> SSH into the EC2 instances and verify connectivity.
+--> Connect to the PostgreSQL database from an EC2 instance.
+
+------------------------------------------------------------------------------------------
+# Check terraform --version
+# install latest version 
+#connect to Terraform via AWS access key & secret key
+# aws configure
+AWS_ACCESS_KEY_ID=AKIAQYSOMWIX5T7IBUT
+AWS_SECRET_ACCESS_KEY=rnxUhJUsoEfTrlblG
+
+#### Main commands to execute ####
+#terraform init
+#terraform validate
+#terraform plan
+#terraform apply -auto-approve
+#terraform destory
+#terraform show
+#terraform version
+----------------------------------------------------------------------------------------------
